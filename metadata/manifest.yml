@@ -1,0 +1,90 @@
+Name: glassfish
+Cartridge-Short-Name: GLASSFISH
+Cartridge-Vendor: medisite
+Cartridge-Version: 0.0.1
+Display-Name: Glassfish 4
+Description: "Glassfish 4 is the JEE reference implementation"
+Version: '4.0'
+License: CDDL 1.1
+Vendor:  oracle
+Categories:
+  - service
+  - java
+  - glassfish
+  - glassfish4
+  - web_framework
+Website: http://glassfish.java.net/
+Help-Topics:
+  "Documentation": https://glassfish.java.net/documentation.html
+Cart-Data:
+  - Key: OPENSHIFT_GLASSFISH_LOG_DIR
+    Type: environment
+    Description: "Directory to store application log files."
+  - Key: OPENSHIFT_TMP_DIR
+    Type: environment
+    Description: "Directory to store application temporary files."
+  - Key: OPENSHIFT_REPO_DIR
+    Type: environment
+    Description: "Application root directory where application files reside. This directory is reset every time you do a git-push"
+  - Key: OPENSHIFT_INTERNAL_PORT
+    Type: environment
+    Description: "Internal port to which the web-framework binds to."
+  - Key: OPENSHIFT_INTERNAL_IP
+    Type: environment
+    Description: "Internal IP to which the web-framework binds to."
+  - Key: OPENSHIFT_APP_DNS
+    Type: environment
+    Description: "Fully qualified domain name for the application."
+  - Key: OPENSHIFT_APP_NAME
+    Type: environment
+    Description: "Application name"
+  - Key: OPENSHIFT_DATA_DIR
+    Type: environment
+    Description: "Directory to store application data files. Preserved across git-pushes. Not shared across gears."
+  - Key: OPENSHIFT_APP_UUID
+    Type: environment
+    Description: "Unique ID which identified the application. Does not change between gears."
+  - Key: OPENSHIFT_GEAR_UUID
+    Type: environment
+    Description: "Unique ID which identified the gear. This value changes between gears."
+Provides:
+  - "glassfish-4.0"
+  - "glassfish"
+  - "glassfish(version) = 4.0"
+  - "glassfish(version) >= 4.0"
+Publishes:
+  get-internal-uri:
+    Type: "NET_TCP:http"
+  publish-http-url:
+    Type: "NET_TCP:httpd-proxy-info"
+  publish-gear-endpoint:
+    Type: "NET_TCP:gear-endpoint-info"
+Subscribes:
+  set-db-connection-info:
+    Type: "NET_TCP:db:connection-info"
+    Required: false
+  set-nosql-db-connection-info:
+    Type: "NET_TCP:nosqldb:connection-info"
+    Required: false
+  set-jdbc-info:
+    Type: "NET_TCP:jdbc"
+Group-Overrides:
+  - components:
+    - "glassfish-4.0"
+    - web_proxy
+Endpoints:
+  - Private-IP-Name:   IP
+    Private-Port-Name: HTTP_PORT
+    Private-Port:      8080
+    Public-Port-Name:  HTTP_PROXY_PORT
+    Mappings:
+      - Frontend:      ""
+        Backend:       ""
+        Options:       { "websocket": 1}
+      - Frontend:      "/health"
+        Backend:       "/$OPENSHIFT_REPO_DIR/.openshift/configuration/health.html"
+        Options:       { "file": 1}
+  - Private-IP-Name:   IP
+    Private-Port-Name: ADMIN_PORT
+    Private-Port:      4848
+    Public-Port-Name:  ADMIN_PROXY_PORT	

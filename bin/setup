@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+set -x
+
+SYSTEM_GLASSFISH_DIR=/var/lib/glassfish4
+
+mkdir ${OPENSHIFT_GLASSFISH_DIR}/{config,run,logs,tmp}
+mkdir ${OPENSHIFT_HOMEDIR}/.m2
+
+# Link the system Glassfish binaries to the cart Glassfish instance directory
+chmod u+x ${SYSTEM_GLASSFISH_DIR}/glassfish/bin/asadmin
+ln -s ${SYSTEM_GLASSFISH_DIR}/glassfish/bin/asadmin ${OPENSHIFT_GLASSFISH_DIR}/bin/asadmin
+ln -s ${SYSTEM_GLASSFISH_DIR}/glassfish/lib ${OPENSHIFT_GLASSFISH_DIR}/lib
+
+# Copy the configurations to the Glassfish conf directory
+cp ${OPENSHIFT_GLASSFISH_DIR}/versions/4.0/config/* ${OPENSHIFT_GLASSFISH_DIR}/config
+#cp ${OPENSHIFT_GLASSFISH_DIR}/template/domain1/* ${OPENSHIFT_GLASSFISH_DIR}/domain1
+
+# Create a link from the repo/autodeploy directory to the Glassfish webapps directory
+#ln -s ${OPENSHIFT_REPO_DIR}/domain1/autodeploy ${OPENSHIFT_GLASSFISH_DIR}/domain1/autodeploy
+
+
+# Create and install the initial template WAR
+pushd $OPENSHIFT_GLASSFISH_DIR/template/domain1
+#jar cvf $OPENSHIFT_GLASSFISH_DIR/template/webapps/ROOT.war ./*
+popd
