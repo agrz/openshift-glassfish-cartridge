@@ -5,7 +5,7 @@ Cartridge-Version: 0.0.1
 Display-Name: Glassfish 4
 Description: "Glassfish 4 is the JEE reference implementation"
 Version: '4.0'
-Source-Url: https://github.com/agrz/openshift-glassfish-cartridge.git
+Source-Url: https://github.com/agrz/openshift-glassfish-cartridge/archive/master.zip
 License: CDDL 1.1
 Vendor:  oracle
 Categories:
